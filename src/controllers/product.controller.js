@@ -1,26 +1,28 @@
-import { userModel, productModel } from "../models/index.js";
-import { uploadImage } from "../utils/uploadImage.js";
-import { v4 as uuidv4 } from "uuid";
-import { unlink } from "fs/promises";
+import { productModel } from "../models/product.model.js";
+import { uploadOnCloudinary } from "../utils/utils.js";
+// import { v4 as uuidv4 } from "uuid";
+// import { unlink } from "fs/promises";
 
 export const createProduct = async (req, res) => {
   try {
-    const { name, price, description, category, type, quantity } = req.body;
+    const { name, category, quantity, description, price } = req.body;
 
-    if (!name || !price || !description || !category || !type || !quantity) {
+    if (!name || !price || !description || !category || !quantity) {
       return res.status(400).json({ msg: "All fields are required" });
     }
-
+    console.log(req.body);
+    console.log(req.fileName);
     const image = req.files?.image;
+    // console.log(image);
     if (!image) {
       return res.status(400).json({ msg: "Image is required" });
     }
 
-    const imageId = uuidv4();
-    const imageExtension = image.name.split(".").pop();
-    const fileName = `${imageId}.${imageExtension}`;
+    // const imageId = uuidv4();
+    // const imageExtension = image.name.split(".").pop();
+    // const fileName = `${imageId}.${imageExtension}`;
 
-    const result = await uploadImage(image, fileName);
+    const result = await uploadOnCloudinary(image, "../public/images");
 
     if (!result) {
       return res.status(400).json({ msg: "Failed to upload image" });
@@ -31,9 +33,8 @@ export const createProduct = async (req, res) => {
       price,
       description,
       category,
-      type,
       quantity,
-      image: fileName,
+      image: "../public/images",
     });
 
     const saveProduct = await product.save();
@@ -45,6 +46,7 @@ export const createProduct = async (req, res) => {
   }
 };
 
+// get product code *******
 export const getAllProducts = async (req, res) => {
   try {
     const products = await productModel.find().populate("category");

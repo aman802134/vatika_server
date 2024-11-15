@@ -7,7 +7,7 @@ import { uploadRouter } from "./src/routes/uploadRoute.js";
 
 const app = express();
 const PORT = config.port || 3000;
-// app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
     origin: "*",
