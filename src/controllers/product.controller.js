@@ -1,5 +1,7 @@
+import { fileURLToPath } from "url";
 import { productModel } from "../models/product.model.js";
 import { uploadOnCloudinary } from "../utils/utils.js";
+import path, { dirname } from "path";
 // import { v4 as uuidv4 } from "uuid";
 // import { unlink } from "fs/promises";
 
@@ -10,23 +12,15 @@ export const createProduct = async (req, res) => {
     if (!name || !price || !description || !category || !quantity) {
       return res.status(400).json({ msg: "All fields are required" });
     }
-    console.log(req.body);
-    console.log(req.fileName);
-    const image = req.files?.image;
-    // console.log(image);
-    if (!image) {
-      return res.status(400).json({ msg: "Image is required" });
-    }
 
-    // const imageId = uuidv4();
-    // const imageExtension = image.name.split(".").pop();
-    // const fileName = `${imageId}.${imageExtension}`;
+    const image = req.file?.image;
+    console.log(req.file);
 
-    const result = await uploadOnCloudinary(image, "../public/images");
-
-    if (!result) {
-      return res.status(400).json({ msg: "Failed to upload image" });
-    }
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
+    const result = await uploadOnCloudinary(
+      path.resolve(__dirname, "../../public/images/" + req.file.filename)
+    );
 
     const product = new productModel({
       name,
@@ -34,7 +28,7 @@ export const createProduct = async (req, res) => {
       description,
       category,
       quantity,
-      image: "../public/images",
+      image: result,
     });
 
     const saveProduct = await product.save();

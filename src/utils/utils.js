@@ -1,14 +1,12 @@
-import cloudinaryConfig from "../config/cloudinaryConfig.js";
 import fs from "fs";
+import cloudinary from "../config/cloudinaryConfig.js";
 
 const uploadOnCloudinary = async (filePath) => {
   try {
     if (!filePath) return "Not getting file path";
-    const response = await cloudinaryConfig.uploader.upload(filePath, {
-      resource_type: auto,
-      use_filename: true,
-    });
+    const response = await cloudinary.uploader.upload(filePath);
     console.log("file uploaded successfully", response.url);
+    fs.unlinkSync(filePath);
     return response.url;
   } catch (error) {
     fs.unlinkSync(filePath);
