@@ -4,17 +4,23 @@ import { uploadOnCloudinary } from "../utils/utils.js";
 import path, { dirname } from "path";
 // import { v4 as uuidv4 } from "uuid";
 // import { unlink } from "fs/promises";
-
 export const createProduct = async (req, res) => {
+  console.log("recieved request from client");
   try {
+    console.log("req.body:", req.body);
+    console.log("reqfiles:", req.file);
     const { name, category, quantity, description, price } = req.body;
 
     if (!name || !price || !description || !category || !quantity) {
       return res.status(400).json({ msg: "All fields are required" });
     }
 
-    const image = req.file?.image;
-    console.log(req.file);
+    const image = req.file.filename;
+    // console.log(req.files);
+
+    if (!image) {
+      return res.status(400).json({ msg: "Image is required" });
+    }
 
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = dirname(__filename);
