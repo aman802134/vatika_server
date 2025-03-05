@@ -1,14 +1,13 @@
 import express from "express";
-import isAdmin from "../middleware/authorization.middleware.js";
 import authMiddleware from "../middleware/authentication.middleware.js";
 
 const router = express.Router();
 
-router.get("/welcome", authMiddleware, isAdmin, (req, res) => {
+router.get("/welcome", authMiddleware, (req, res) => {
   const { id, email, role } = req.userInfo;
 
   res.json({
-    msg: "welcome to test route",
+    msg: "welcom to test route",
     user: {
       userId: id,
       userEmail: email,
@@ -17,4 +16,4 @@ router.get("/welcome", authMiddleware, isAdmin, (req, res) => {
   });
 });
 
-export const adminRoute = router;
+export const testRoute = router;
