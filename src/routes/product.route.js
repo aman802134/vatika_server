@@ -1,5 +1,11 @@
 import express from "express";
-import { createProduct } from "../controllers/product.controller.js";
+import {
+  createProduct,
+  deleteProduct,
+  getAllProducts,
+  getProductById,
+  updateProduct,
+} from "../controllers/product.controller.js";
 import upload from "../middleware/multer.middleware.js";
 import authMiddleware from "../middleware/authentication.middleware.js";
 import isAdmin from "../middleware/authorization.middleware.js";
@@ -13,7 +19,9 @@ router.post(
   upload.single("image"),
   createProduct
 );
-router.get("/produts");
-router.get("/product/:id");
+router.get("/allProducts", getAllProducts);
+router.get("/oneProduct/:id", getProductById);
+router.put("/update/:id", updateProduct);
+router.delete("/delete/:id", deleteProduct);
 
 export const productRoute = router;
