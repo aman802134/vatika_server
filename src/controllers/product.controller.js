@@ -4,7 +4,10 @@ import uploadImage from "../utils/upload.cloudinary.js";
 export const createProduct = async (req, res) => {
   try {
     const { name, type, description, category, price, quantity } = req.body;
-
+    console.log("this is req:", req.body);
+    if (!req.file) {
+      return res.status(400).json({ msg: "no image found" });
+    }
     const filePath = req.file.path;
     const result = await uploadImage(filePath);
     if (result.msg) {
