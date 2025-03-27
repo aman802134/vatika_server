@@ -82,6 +82,11 @@ export const login = async (req, res) => {
     });
     return res.status(201).json({ message: "login successfull", accessToken });
   } catch (error) {
-    res.status(500).json({ msg: "something error happend" });
+    res.status(500).json({ msg: error.message });
   }
+};
+
+export const logout = (req, res) => {
+  res.clearCookie("access_token");
+  return res.status(200).json({ msg: "logout successfully" });
 };

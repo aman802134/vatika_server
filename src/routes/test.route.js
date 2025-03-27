@@ -4,7 +4,7 @@ import isAdmin from "../middleware/authorization.middleware.js";
 
 const router = express.Router();
 
-router.get("/me", authMiddleware, isAdmin, (req, res) => {
+router.get("/me", authMiddleware, (req, res) => {
   const { id, email, role } = req.userInfo;
 
   res.json({

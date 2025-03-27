@@ -6,8 +6,8 @@ import fs from "fs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
 const uploadDir = path.join(__dirname, "../../uploads");
-console.log("this is uploaddir : ", uploadDir);
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
